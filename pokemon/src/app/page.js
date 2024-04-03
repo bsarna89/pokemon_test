@@ -65,7 +65,7 @@ export default function Home() {
 
           <Flex direction="column">
             {fileterdPokemonList.map((pokemon) => (
-              <Card>
+              <Card key={pokemon.name}>
                 <Link
                   key={pokemon.name}
                   href={{
