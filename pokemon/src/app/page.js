@@ -1,21 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import getId from "./utils/getId";
 import axios from "axios";
 
-const API_URL = "https://pokeapi.co/api/v2/pokemon?offset=10&limit=10";
+const API_URL = "https://pokeapi.co/api/v2/pokemon?offset=151&limit=151";
 
 export default function Home() {
   const [pokemonList, setPokemonList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredPokemon, setFilteredPokemon] = useState([]);
+  const [fileterdPokemonList, setFilteredPokemonList] = useState([]);
 
   useEffect(() => {
     async function fetchPokemon() {
       try {
         const response = await axios.get(`${API_URL}`);
         setPokemonList(response.data.results);
-        setFilteredPokemon(response.data.results);
+        setFilteredPokemonList(response.data.results);
       } catch (error) {
         console.error("Error fetching Pokemon:", error);
       }
@@ -28,7 +30,7 @@ export default function Home() {
     const filtered = pokemonList.filter((pokemon) => {
       return pokemon.name.toLowerCase().includes(searchTerm.toLowerCase());
     });
-    setFilteredPokemon(filtered);
+    setFilteredPokemonList(filtered);
   }, [searchTerm, pokemonList]);
 
   const handleSearch = (event) => {
@@ -50,9 +52,16 @@ export default function Home() {
 
       <main>
         <div> POKEMON LIST </div>
-
-        {filteredPokemon.map((pokemon) => (
-          <h2>{pokemon.name}</h2>
+        {fileterdPokemonList.map((pokemon) => (
+          <Link
+            key={pokemon.name}
+            href={{
+              pathname: `/pokemon/${pokemon.name}`,
+              query: { num: getId(pokemon.url) },
+            }}
+          >
+            <h2>{pokemon.name} </h2>
+          </Link>
         ))}
       </main>
     </div>
