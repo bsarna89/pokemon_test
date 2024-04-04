@@ -16,7 +16,7 @@ import {
   AspectRatio,
 } from "@radix-ui/themes";
 import copy from "./copy/pokemon.copy";
-import { getIdFromUrl } from "./utils/get-id-from-url";
+import { getIdFromUrl, sortByName } from "./utils/utils";
 import axios from "axios";
 
 const API_URL = "https://pokeapi.co/api/v2/pokemon";
@@ -42,7 +42,7 @@ export default function Home() {
           try {
             const response = await axios.get(`${API_URL_LIST}`);
             if (response.status === 200) {
-              setPokemonList(response.data.results);
+              setPokemonList(sortByName(response.data.results));
               setFilteredPokemonList(response.data.results);
               setLoading(false);
             }
